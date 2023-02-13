@@ -1,21 +1,16 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useLayoutEffect } from "react";
 import { View, FlatList, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/Header";
 import Task from "../components/Task";
 import AddBtn from "../components/AddBtn";
 import BackBtn from "../components/BackBtn";
+import socket from "../utils/socket";
 
 const Home = () => {
   const [addingTask, setAddingTask] = useState(false);
   const [newTask, setNewTask] = useState("");
-  const [tasks, setTasks] = useState([
-    { id: "1", title: "This is the Task No. 1", checked: true },
-    { id: "2", title: "This is the Task No. 2", checked: false },
-    { id: "3", title: "This is the Task No. 3", checked: true },
-    { id: "4", title: "This is the Task No. 4", checked: false },
-    { id: "5", title: "This is the Task No. 5", checked: false },
-  ]);
+  const [tasks, setTasks] = useState([]);
 
   const checkTask = useCallback((id) => {
     const index = tasks.findIndex((el) => el.id === id);
@@ -27,15 +22,19 @@ const Home = () => {
   }, []);
 
   const addTask = useCallback(() => {
-    const newTasks = [...tasks];
-    newTasks.push({ id: "a", title: newTask, checked: false });
-    setTasks(newTasks);
+    socket.emit("addTodo", newTask);
     handleBack();
   }, [newTask]);
 
   const handleBack = useCallback(() => {
     setAddingTask(false);
     setNewTask("");
+  }, []);
+
+  useLayoutEffect(() => {
+    socket.on("todos", (data) => {
+      setTasks(data);
+    });
   }, []);
 
   return (
