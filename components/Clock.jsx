@@ -16,7 +16,11 @@ const Clock = () => {
     };
   });
 
-  return <Text className="text-4xl">{`${hours}:${minutes}`}</Text>;
+  return (
+    <Text className="text-4xl">{`${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}`}</Text>
+  );
 };
 
 export default Clock;
