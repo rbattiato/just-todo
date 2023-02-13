@@ -1,4 +1,5 @@
 # Just Todo
+
 A simple todo list built with React Native and socket.io
 
 Designed by [Richard Maasri](https://www.figma.com/@dasKamel), link [here](https://www.figma.com/community/file/1027158847857614638).
