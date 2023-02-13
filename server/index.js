@@ -21,27 +21,12 @@ socketIO.on("connection", (socket) => {
   console.log(`⚡: ${socket.id} user just connected!`);
 
   socket.on("addTodo", (todo) => {
-    todoList.unshift({ _id: generateID(), title: todo, comments: [] });
+    todoList.unshift({ id: generateID(), title: todo, comments: [] });
     socket.emit("todos", todoList);
   });
 
-  socket.on("retrieveComments", (id) => {
-    let result = todoList.filter((todo) => todo._id === id);
-    socket.emit("displayComments", result[0].comments);
-  });
-
-  socket.on("addComment", (data) => {
-    let result = todoList.filter((todo) => todo._id === data.todo_id);
-    result[0].comments.unshift({
-      id: generateID(),
-      title: data.comment,
-      user: data.user,
-    });
-    socket.emit("displayComments", result[0].comments);
-  });
-
   socket.on("deleteTodo", (id) => {
-    let result = todoList.filter((todo) => todo._id !== id);
+    let result = todoList.filter((todo) => todo.id !== id);
     todoList = result;
     socket.emit("todos", todoList);
   });
